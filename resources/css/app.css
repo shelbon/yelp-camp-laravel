@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+    --fs-normal: 1.6rem;
+    --ff-sans-normal:'Archivo', sans-serif;
+    --clr-white:#f9f6f1;
+}
+html{
+    font-size: 62.5%;
+    font-family: var(--ff-sans-normal);
+    background-color: var(--clr-white);
+}
+/* ------------------- */
+/* Reset               */
+/* ------------------- */
+
+/* Box sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Reset margins*/
+body, h1, h2, h3, h4, h5, p, figure, caption {
+    margin: 0;
+}
+
+/* rest link,list style*/
+a {
+    color: currentColor;
+}
+
+a:hover, a:link, a:active, a:visited {
+    text-decoration: none;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+    font-weight: 400;
+}
+
+/* setup the body */
+body {
+    font-family: var(--ff-sans-normal);
+    font-size: var(--fs-normal);
+    line-height: 1.5;
+    min-height: 100vh;
+    width: 100%;
+}
+
+/* make image easier to work with */
+
+image {
+    max-width: 100%;
+    display: block;
+}
+
+/* make form  elements easier to work with */
+input, button, textarea, select {
+    font: inherit;
+}
+
+/* remove annimation for people who've turned them off */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ------------------- */
+/* Utility classes     */
+/* ------------------- */
+.flex {
+    display: flex;
+    gap: var(--gap, 1rem);
+}
+
+.flow > *:where(:not(:first-child)) {
+    margin-top: var(--flow-space, 1rem);
+
+}
+
+.grid {
+    display: grid;
+    gap: var(--gap, 1rem);
+}
+
+.container {
+    inline-size: min(80rem, 100% - 2rem);
+    margin-inline: auto;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap; /* added line */
+    border: 0;
+}
