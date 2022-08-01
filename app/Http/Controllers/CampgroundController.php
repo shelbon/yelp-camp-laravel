@@ -17,4 +17,7 @@ class CampgroundController extends Controller
         return view('campgrounds.home',['campgrounds'=>
             $this->campgroundService->getCamprounds()]);
     }
+    public  function campground($id){
+        return view('campgrounds.detail',['campground'=>$this->campgroundService->getCampgrounds($id)]);
+    }
 }

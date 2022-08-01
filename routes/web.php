@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\CampgroundsController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CampgroundController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/',[HomeController::class,'home']);
-Route::get('/campgrounds',[CampgroundsController::class,'home']);
+Route::get('/campgrounds',[CampgroundController::class,'home']);
+Route::get('/campgrounds/{id}',[CampgroundController::class,'campground']);

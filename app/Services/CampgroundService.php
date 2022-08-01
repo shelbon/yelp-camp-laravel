@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Repositories\CampgroundRepository;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CampgroundService
 {
@@ -18,5 +19,12 @@ class CampgroundService
     }
     public  function  getCamprounds(){
         return $this->campgroundRepository->getCampgrounds();
+    }
+
+    public function getCampgrounds($id){
+        if($id==null || $id<0){
+            throw new BadRequestException();
+        }
+        return$this->campgroundRepository->getCampground($id);
     }
 }
