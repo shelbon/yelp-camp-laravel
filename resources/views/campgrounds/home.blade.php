@@ -45,6 +45,13 @@
                             class="border-solid border-2 rounded-lg p-4
                 grid grid-cols-1 grid-rows-[min-content_1fr_min-content]
 				gap-y-4">
+                            @if(session('user'))
+                            <form action="/campgrounds/{{$campground->id}}" method="POST" class="flex justify-end"  >
+                                @csrf
+                                @method('DELETE')
+                                <button aria-label="delete campground {{$campground->name}}" class=" focus:outline-none w-12 h-12 border border-[0.150rem] rounded-full  border-red-200 flex items-center flex-shrink-0 justify-center"><img  class="h-12 w-12" src="https://api.iconify.design/charm/cross.svg?color=%23b91c1c"/> </button>
+                            </form>
+                            @endif
                             <img class="rounded-lg grid-row-start-1 grid-row-end-1" src="{{$campground->image}}"
                                  alt="campground thumbnail"/>
                             <section class="grid-row-start-2 grid-row-end-2">

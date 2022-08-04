@@ -30,6 +30,10 @@ class CampgroundService
     }
 
     public function create(array $data): void {
-       $this->campgroundRepository->create($data);
+        $this->campgroundRepository->create($data);
+    }
+
+    public function delete($id): int{
+        return $this->campgroundRepository->delete($id);
     }
 }

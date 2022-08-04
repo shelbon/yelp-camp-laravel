@@ -4,7 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampgroundController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -21,3 +21,4 @@ Route::get('/campgrounds',[CampgroundController::class,'home']);
 Route::get('/campgrounds/add',[CampgroundController::class,'showAddCampground']);
 Route::post('/campgrounds/add',[CampgroundController::class,'processAddCampground']);
 Route::get('/campgrounds/{id}',[CampgroundController::class, 'showCampgroundDetail']);
+Route::delete('campgrounds/{id}',[CampgroundController::class,'deleteCampgrounds']);

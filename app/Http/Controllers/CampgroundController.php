@@ -43,4 +43,8 @@ class CampgroundController extends Controller
         $this->campgroundService->create($validated);
         return Redirect::back()->with(['success'=>"campground created"]);
     }
+    public function deleteCampgrounds($id){
+        $this->campgroundService->delete($id);
+        return Redirect::back()->with(['success'=>"campground deleted"]);
+    }
 }

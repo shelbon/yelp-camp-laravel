@@ -23,5 +23,8 @@ class CampgroundRepository{
         $campground->description=$data['description'];
         $campground->save();
     }
+    public function delete($id): int {
+        return Campground::destroy($id);
+    }
 
 }
