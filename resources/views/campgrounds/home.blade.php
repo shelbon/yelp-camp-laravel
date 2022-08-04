@@ -45,7 +45,7 @@
                             class="border-solid border-2 rounded-lg p-4
                 grid grid-cols-1 grid-rows-[min-content_1fr_min-content]
 				gap-y-4">
-                            @if(session('user'))
+                            @if(session('user') && session('user')->id == $campground->author->id)
                                 <form action="/campgrounds/{{$campground->id}}" method="POST" class="flex justify-end">
                                     @csrf
                                     @method('DELETE')
@@ -70,7 +70,7 @@
 	 lg:text-3xl lg:p-6"
                                     role="button"
                                     href="/campgrounds/{{$campground->id}}">View</a>
-                                @if(session('user'))
+                                @if(session('user') && session('user')->id == $campground->author->id)
                                     <a
                                         class="grid-row-start-3 grid-row-end-3 cursor-pointer bg-transparent border-[0.1rem] border-solid
 	border-[#dcdcdc] rounded-md
