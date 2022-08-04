@@ -115,3 +115,8 @@ input, button, textarea, select {
     white-space: nowrap; /* added line */
     border: 0;
 }
+.form-input,.form-textarea{
+    background-color: var(--clr-white);
+    border-radius:2px;
+    border-color: transparent;
+}

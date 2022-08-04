@@ -18,4 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/',[HomeController::class,'home']);
 Route::get('/campgrounds',[CampgroundController::class,'home']);
-Route::get('/campgrounds/{id}',[CampgroundController::class,'campground']);
+Route::get('/campgrounds/add',[CampgroundController::class,'showAddCampground']);
+Route::post('/campgrounds/add',[CampgroundController::class,'processAddCampground']);
+Route::get('/campgrounds/{id}',[CampgroundController::class, 'showCampgroundDetail']);

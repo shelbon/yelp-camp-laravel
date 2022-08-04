@@ -15,5 +15,13 @@ class CampgroundRepository{
     public function getCampground($id){
         return Campground::find($id);
     }
+    public function create($data){
+        $campground=new Campground();
+        $campground->title=$data['name'];
+        $campground->image=$data['image'];
+        $campground->price=$data['price'];
+        $campground->description=$data['description'];
+        $campground->save();
+    }
 
 }

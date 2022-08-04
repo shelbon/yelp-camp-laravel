@@ -1,5 +1,5 @@
 @props([
-    'title'=>''
+    'title'=>'',
 ])
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +14,8 @@
         rel="stylesheet"
     />
     @vite('resources/css/app.css')
+    @stack('styles')
+
     <title>{{$title}}</title>
 </head>
 <body>
