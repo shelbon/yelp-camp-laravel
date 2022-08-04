@@ -21,4 +21,6 @@ Route::get('/campgrounds',[CampgroundController::class,'home']);
 Route::get('/campgrounds/add',[CampgroundController::class,'showAddCampground']);
 Route::post('/campgrounds/add',[CampgroundController::class,'processAddCampground']);
 Route::get('/campgrounds/{id}',[CampgroundController::class, 'showCampgroundDetail']);
-Route::delete('campgrounds/{id}',[CampgroundController::class,'deleteCampgrounds']);
+Route::delete('/campgrounds/{id}',[CampgroundController::class,'deleteCampgrounds']);
+Route::get('/campgrounds/{id}/edit',[CampgroundController::class,'showEditForm']);
+Route::put('/campgrounds/{id}', [CampgroundController::class,'processEditCampground']);

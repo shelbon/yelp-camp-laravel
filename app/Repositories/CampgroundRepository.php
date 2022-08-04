@@ -27,4 +27,13 @@ class CampgroundRepository{
         return Campground::destroy($id);
     }
 
+    public function edit(array $data){
+        $campground=Campground::find($data['id']);
+        $campground->title=$data['title'];
+        $campground->image=$data['image'];
+        $campground->price=$data['price'];
+        $campground->description=$data['description'];
+        $campground->save();
+    }
+
 }

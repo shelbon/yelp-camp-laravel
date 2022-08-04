@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Campground;
 use App\Services\CampgroundService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
@@ -46,5 +47,19 @@ class CampgroundController extends Controller
     public function deleteCampgrounds($id){
         $this->campgroundService->delete($id);
         return Redirect::back()->with(['success'=>"campground deleted"]);
+    }
+    public  function  showEditForm($id){
+        return view('campgrounds.edit',["campground"=>$this->campgroundService->getCampgrounds($id)]);
+    }
+    public  function processEditCampground(Request $request){
+        $validated=$request->validate([
+            'id'=>'required|alpha_num',
+            'title' => 'required|max:255',
+            'description' => 'required|max:255',
+            'price'=>'required|numeric',
+            'image'=>'required|url'
+        ]);
+        $this->campgroundService->edit($validated);
+        return Redirect::back()->with(['success'=>"campground edited"]);
     }
 }

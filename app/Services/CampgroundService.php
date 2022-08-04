@@ -36,4 +36,8 @@ class CampgroundService
     public function delete($id): int{
         return $this->campgroundRepository->delete($id);
     }
+
+    public function edit( Array $data){
+        $this->campgroundRepository->edit($data);
+    }
 }
