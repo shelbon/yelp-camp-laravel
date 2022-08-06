@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Campground;
+use App\Models\User;
+use App\Rules\UserExist;
 use App\Services\CampgroundService;
+use App\Services\UserService;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -14,9 +17,11 @@ use Illuminate\Http\Request;
 class CampgroundController extends Controller
 {
     private CampgroundService $campgroundService;
+    private UserService $userService;
 
     public function __construct(CampgroundService $campgroundService){
         $this->campgroundService=$campgroundService;
+        $this->userService = $userService;
     }
 
     public function  home(): Factory|View|Application
@@ -36,6 +41,7 @@ class CampgroundController extends Controller
     public  function processAddCampground(Request $request): RedirectResponse
     {
         $validated = $request->validate([
+            'id'=>['required','alpha_num', new UserExist($this->userService)],
             'name' => 'required|max:255',
             'description' => 'required|max:255',
             'price'=>'required|numeric',

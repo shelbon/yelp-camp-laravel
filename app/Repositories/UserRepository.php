@@ -13,4 +13,8 @@ class UserRepository {
             'password' => Hash::make($user['password']),
         ]);
     }
+
+    public function exist(string $id){
+        return User::where('_id',$id)->exists();
+    }
 }

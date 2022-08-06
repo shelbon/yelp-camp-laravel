@@ -15,4 +15,8 @@ class UserService
     public function create(array $validated): User {
        return $this->userRepository->create($validated);
     }
+
+    public function exist(string $id){
+        return $this->userRepository->exist($id);
+    }
 }
