@@ -1,14 +1,20 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
-const config = {
+module.exports = {
     content: [
-        "./resources/**/*.blade.php",
-        "./resources/**/*.js",],
+        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
+        './storage/framework/views/*.php',
+        './resources/views/**/*.blade.php',
+    ],
 
     theme: {
-        extend: {}
+        extend: {
+            fontFamily: {
+                sans: ['Nunito', ...defaultTheme.fontFamily.sans],
+            },
+        },
     },
 
     plugins: [require('@tailwindcss/forms')({ strategy: 'class' }), require('tailwindcss-logical')]
 };
-
-module.exports = config;

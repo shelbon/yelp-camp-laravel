@@ -1,10 +1,9 @@
 <?php
 
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampgroundController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -20,7 +19,13 @@ Route::get('/',[HomeController::class,'home']);
 Route::get('/campgrounds',[CampgroundController::class,'home']);
 Route::get('/campgrounds/add',[CampgroundController::class,'showAddCampground']);
 Route::post('/campgrounds/add',[CampgroundController::class,'processAddCampground']);
-Route::get('/campgrounds/{id}',[CampgroundController::class, 'showCampgroundDetail']);
-Route::delete('/campgrounds/{id}',[CampgroundController::class,'deleteCampgrounds']);
-Route::get('/campgrounds/{id}/edit',[CampgroundController::class,'showEditForm']);
-Route::put('/campgrounds/{id}', [CampgroundController::class,'processEditCampground']);
+Route::get('/campgrounds/{id}',[CampgroundController::class, 'showCampgroundDetail'])->where('id','^[0-9a-fA-F]{24}$');
+Route::delete('/campgrounds/{id}',[CampgroundController::class,'deleteCampgrounds'])->where('id','^[0-9a-fA-F]{24}$');
+Route::get('/campgrounds/{id}/edit',[CampgroundController::class,'showEditForm'])->where('id','^[0-9a-fA-F]{24}$');
+Route::put('/campgrounds/{id}', [CampgroundController::class,'processEditCampground'])->where('id','^[0-9a-fA-F]{24}$');
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__.'/auth.php';
