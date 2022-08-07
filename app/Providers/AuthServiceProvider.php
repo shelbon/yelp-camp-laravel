@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Campground;
+use App\Policies\CampgroundPolicy;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\Gate;
 use App\Models\User;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
@@ -14,7 +17,7 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
+        Campground::class => CampgroundPolicy::class
     ];
 
     /**
@@ -25,9 +28,7 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Gate::define('add-campground', function (User $user) {
-            return isset($user);
-        });
+
         //
     }
 }
