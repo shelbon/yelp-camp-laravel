@@ -1,4 +1,4 @@
-@props(['username'=>""])
+
 <nav
     class=" z-1000 grid grid-cols-1
            grid-rows-[min-content_max-content_1fr]
@@ -15,7 +15,7 @@
 			lg:pt-16
 			lg:py-0"
 >
-    <img class="row-start-1 row-end-1 ml-4 self-center" src="/assets/Logo.svg" alt="logo" />
+    <img class="row-start-1 row-end-1 ml-4 self-center" src="/assets/Logo.svg" alt="logo"/>
     <ul
         class="w-full hidden
 	text-center  mt-4
@@ -26,15 +26,26 @@
 	lg:px-0 lg:w-auto
 	lg:flex-row text-md sm:text-3xl tracking-wide"
     >
+
+
         <li class="md:p-4 py-8 relative"><a href="/">Home</a></li>
-        @if($username)
+        @guest
             <li class="md:p-4 py-8 relative"><a href="/signin">Login</a></li>
-        @else
-            <li class="font-bold">{{$username}}</li>
-            <li class="md:p-4 py-8 relative"><a href="/">Logout</a></li>
-        @endif
+            <li class="md:p-4 py-8 relative"><a href="/signup">Sign up</a></li>
+        @endguest
+        @auth
+            <li class="font-bold">{{ Auth::user()->email }}</li>
+            <li class="md:p-4 py-8 relative"> <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a href="{{ route('logout') }}"  onclick="event.preventDefault();
+                                        this.closest('form').submit();"> Log Out</a>
+
+                </form></li>
+        @endauth
     </ul>
-    <x-icon id="hamburger" class="cursor-pointer justify-self-end self-center   col-start-2 col-end-2 row-start-1 row-end-1 lg:hidden bg-[#f2f1ed] rounded-md text-5xl p-2"
+    <x-icon id="hamburger"
+            class="cursor-pointer justify-self-end self-center   col-start-2 col-end-2 row-start-1 row-end-1 lg:hidden bg-[#f2f1ed] rounded-md text-5xl p-2"
             url="/assets/Hamburger Menu.svg"></x-icon>
+
 
 </nav>

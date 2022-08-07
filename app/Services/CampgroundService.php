@@ -33,11 +33,16 @@ class CampgroundService
         $this->campgroundRepository->create($data);
     }
 
-    public function delete($id): int{
-        return $this->campgroundRepository->delete($id);
+    public function delete(Campground $campground): int{
+
+        return $this->campgroundRepository->delete($campground);
     }
 
-    public function edit( Array $data){
-        $this->campgroundRepository->edit($data);
+    public function edit(Array $data, Campground $campground){
+        $campground->title=$data['title'];
+        $campground->image=$data['image'];
+        $campground->price=$data['price'];
+        $campground->description=$data['description'];
+        $this->campgroundRepository->edit($campground);
     }
 }

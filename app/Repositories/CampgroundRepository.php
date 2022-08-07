@@ -21,18 +21,16 @@ class CampgroundRepository{
         $campground->image=$data['image'];
         $campground->price=$data['price'];
         $campground->description=$data['description'];
+        $campground->author=$data["id"];
         $campground->save();
     }
-    public function delete($id): int {
-        return Campground::destroy($id);
+    public function delete($campground): int {
+
+        return Campground::destroy($campground->id);
     }
 
-    public function edit(array $data){
-        $campground=Campground::find($data['id']);
-        $campground->title=$data['title'];
-        $campground->image=$data['image'];
-        $campground->price=$data['price'];
-        $campground->description=$data['description'];
+    public function edit($campground){
+
         $campground->save();
     }
 

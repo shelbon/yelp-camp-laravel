@@ -26,7 +26,7 @@
     <div class="pl-3 w-full flex items-center justify-between">
         <p tabindex="0"
            class="focus:outline-none text-sm leading-none  {{ $textColors[$type]}}">
-            {{$texte}}</p>
+            {{html_entity_decode($texte,ENT_QUOTES)}}</p>
 
     </div>
 </article>
