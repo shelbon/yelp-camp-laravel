@@ -27,36 +27,44 @@ class CampgroundController extends Controller
         $this->userService = $userService;
     }
 
-    public function home(): Factory|View|Application
+    public function home(Request $request): Factory|View|Application
     {
-
+        if ($request->search) {
+            return $this->search($request);
+        }
         return view('campgrounds.home', ['campgrounds' =>
             $this->campgroundService->getCamprounds()]);
     }
 
-    public function showCampgroundDetail(Campground $campground): Factory|View|Application
+    public function search(Request $request): Factory|View|Application
     {
+        $request->validate([
+            'search' => 'alpha_num|max:200'
+        ]);
+        Debugbar::info($request->search);
+        return view('campgrounds.home', ['campgrounds' => $this->campgroundService->search($request->search)]);
+    }
 
-        return view('campgrounds.detail', ['campground' => $campground]);
+    public function showCampgroundDetail(string $id): Factory|View|Application
+    {
+        return view('campgrounds.detail',['campground'=>$this->campgroundService->getCampgrounds($id)]);
     }
 
     public function showAddCampground(User $user): Factory|View|Application
     {
-
         return view('campgrounds.create');
     }
-
-    public function processAddCampground(Request $request): RedirectResponse
+    public  function processAddCampground(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'id' => ['required', 'alpha_num', new UserExist($this->userService)],
             'name' => 'required|max:255',
             'description' => 'required|max:255',
-            'price' => 'required|numeric',
-            'image' => 'required|url'
+            'price'=>'required|numeric',
+            'image'=>'required|url'
         ]);
         $this->campgroundService->create($validated);
-        return Redirect::back()->with(['success' => "campground created"]);
+        return Redirect::back()->with(['success'=>"campground created"]);
     }
 
     public function deleteCampgrounds(Campground $campground): RedirectResponse
