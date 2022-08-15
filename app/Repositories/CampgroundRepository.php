@@ -34,4 +34,9 @@ class CampgroundRepository{
         $campground->save();
     }
 
+    public function search(string $search)
+    {
+        return Campground::whereRaw(['title'=> ['$regex' => $search,'$options'=>'i']])->get();
+    }
+
 }
