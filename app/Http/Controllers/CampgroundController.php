@@ -27,11 +27,21 @@ class CampgroundController extends Controller
         $this->userService = $userService;
     }
 
-    public function home(): Factory|View|Application
+    public function home(Request $request): Factory|View|Application
     {
-
+        if ($request->search) {
+            return $this->search($request);
+        }
         return view('campgrounds.home', ['campgrounds' =>
             $this->campgroundService->getCamprounds()]);
+    }
+     private function search(Request $request): Factory|View|Application
+    {
+        $request->validate([
+            'search' => 'alpha_num|max:200'
+        ]);
+        Debugbar::info($request->search);
+        return view('campgrounds.home', ['campgrounds' => $this->campgroundService->search($request->search)]);
     }
 
     public function showCampgroundDetail(Campground $campground): Factory|View|Application

@@ -45,4 +45,8 @@ class CampgroundService
         $campground->description=$data['description'];
         $this->campgroundRepository->edit($campground);
     }
+
+    public function search(string $search){
+           return $this->campgroundRepository->search($search);
+    }
 }
