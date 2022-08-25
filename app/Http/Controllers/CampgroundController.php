@@ -35,8 +35,7 @@ class CampgroundController extends Controller
         return view('campgrounds.home', ['campgrounds' =>
             $this->campgroundService->getCamprounds()]);
     }
-
-    public function search(Request $request): Factory|View|Application
+     private function search(Request $request): Factory|View|Application
     {
         $request->validate([
             'search' => 'alpha_num|max:200'
@@ -45,26 +44,29 @@ class CampgroundController extends Controller
         return view('campgrounds.home', ['campgrounds' => $this->campgroundService->search($request->search)]);
     }
 
-    public function showCampgroundDetail(string $id): Factory|View|Application
+    public function showCampgroundDetail(Campground $campground): Factory|View|Application
     {
-        return view('campgrounds.detail',['campground'=>$this->campgroundService->getCampgrounds($id)]);
+
+        return view('campgrounds.detail', ['campground' => $campground]);
     }
 
     public function showAddCampground(User $user): Factory|View|Application
     {
+
         return view('campgrounds.create');
     }
-    public  function processAddCampground(Request $request): RedirectResponse
+
+    public function processAddCampground(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'id' => ['required', 'alpha_num', new UserExist($this->userService)],
             'name' => 'required|max:255',
             'description' => 'required|max:255',
-            'price'=>'required|numeric',
-            'image'=>'required|url'
+            'price' => 'required|numeric',
+            'image' => 'required|url'
         ]);
         $this->campgroundService->create($validated);
-        return Redirect::back()->with(['success'=>"campground created"]);
+        return Redirect::back()->with(['success' => "campground created"]);
     }
 
     public function deleteCampgrounds(Campground $campground): RedirectResponse

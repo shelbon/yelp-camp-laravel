@@ -19,8 +19,8 @@ use App\Models\Campground;
 
 Route::get('/',[HomeController::class,'home']);
 Route::get('/campgrounds',[CampgroundController::class,'home']);
-Route::get('/campgrounds/add',[CampgroundController::class,'showAddCampground']);
-Route::post('/campgrounds/add',[CampgroundController::class,'processAddCampground']);
+Route::get('/campgrounds/add',[CampgroundController::class,'showAddCampground'])->middleware('auth');
+Route::post('/campgrounds/add',[CampgroundController::class,'processAddCampground'])->middleware('auth');
 Route::get('/campgrounds/{campground}',[CampgroundController::class, 'showCampgroundDetail']);
 Route::delete('/campgrounds/{campground}',[CampgroundController::class,'deleteCampgrounds']);
 Route::get('/campgrounds/{campground}/edit',[CampgroundController::class,'showEditForm']);

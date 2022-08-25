@@ -77,7 +77,9 @@
 	                                       font-bold p-6 mx-4 mt-8 md:mt-6
 	                                       text-center lg:text-3xl lg:p-6"
                                     role="button"
+
                                     href="/campgrounds/{{$campground->id}}">View campground</a>
+                                    
                                 @if( Auth::user() && Auth::user()->_id == $campground->author)
                                     <a
                                         class="grid-row-start-3 grid-row-end-3 cursor-pointer bg-transparent border-[0.1rem] border-solid
