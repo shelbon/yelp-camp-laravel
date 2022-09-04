@@ -24,4 +24,11 @@ class Campground extends Model
         return $this->belongsTo(User::class, "author_id", '_id')->withDefault();
     }
 
+    public function reviews()
+    {
+
+        return $this->hasMany(Review::class);
+    }
+
+
 }

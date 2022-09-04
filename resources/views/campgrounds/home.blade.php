@@ -2,7 +2,7 @@
     <x-slot:title>
         Campgrounds
     </x-slot:title>
-    <section class="px-[8%] h-[100vh]">
+    <section>
         <header>
             <x-navigation  ></x-navigation>
             <section class=" p-8   flex flex-col space-y-2 bg-[#f9f6f1] text-start">
