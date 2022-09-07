@@ -12,6 +12,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Http\Request;
@@ -32,10 +33,12 @@ class CampgroundController extends Controller
         if ($request->search) {
             return $this->search($request);
         }
-        return view('campgrounds.home', ['campgrounds' =>
-            $this->campgroundService->getCamprounds()]);
+        //eager load relationship to mitigate the N+1 problem
+        $campground = $this->campgroundService->getCamprounds()->load('author');
+        return view('campgrounds.home', ['campgrounds' => $campground]);
     }
-     private function search(Request $request): Factory|View|Application
+
+    private function search(Request $request): Factory|View|Application
     {
         $request->validate([
             'search' => 'alpha_num|max:200'
@@ -46,11 +49,15 @@ class CampgroundController extends Controller
 
     public function showCampgroundDetail(Campground $campground): Factory|View|Application
     {
+        //eager load relationships to mitigate the N+1 problem
+        $campground = $campground->load(['author', 'reviews' => [
+            'author'
+        ]]);
 
         return view('campgrounds.detail', ['campground' => $campground]);
     }
 
-    public function showAddCampground(User $user): Factory|View|Application
+    public function showAddCampground(): Factory|View|Application
     {
 
         return view('campgrounds.create');
@@ -106,5 +113,21 @@ class CampgroundController extends Controller
         ]);
         $this->campgroundService->edit($newCampground, $campground);
         return Redirect::back()->with(['success' => "campground edited"]);
+    }
+
+    public function showFormAddComment(Campground $campground, User $user): Factory|View|Application
+    {
+        return view('campgrounds.new-comment', ['campground' => $campground, 'userId' => Auth::user()->_id]);
+    }
+
+    public function processFormAddComment(Campground $campground, Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'author_id' => ['required', 'alpha_num', new UserExist($this->userService)],
+            'campground_id' => 'required|alpha_num',
+            'comment' => 'required|max:255'
+        ]);
+        $this->campgroundService->addReview($campground, $validated);
+        return \redirect('/campgrounds/' . $campground->id);
     }
 }

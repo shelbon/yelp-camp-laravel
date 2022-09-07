@@ -4,8 +4,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CampgroundController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Http\Request;
 use App\Models\Campground;
+use App\Models\User;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,13 +18,17 @@ use App\Models\Campground;
 |
 */
 
-Route::get('/',[HomeController::class,'home']);
-Route::get('/campgrounds',[CampgroundController::class,'home']);
-Route::get('/campgrounds/add',[CampgroundController::class,'showAddCampground'])->middleware('auth');
-Route::post('/campgrounds/add',[CampgroundController::class,'processAddCampground'])->middleware('auth');
-Route::get('/campgrounds/{campground}',[CampgroundController::class, 'showCampgroundDetail']);
-Route::delete('/campgrounds/{campground}',[CampgroundController::class,'deleteCampgrounds']);
-Route::get('/campgrounds/{campground}/edit',[CampgroundController::class,'showEditForm']);
-Route::put('/campgrounds/{campground}', [CampgroundController::class,'processEditCampground']);
+Route::get('/', [HomeController::class, 'home']);
+Route::get('/campgrounds', [CampgroundController::class, 'home']);
+Route::middleware(['auth'])->group(function () {
+    Route::get('/campgrounds/{campground}/comment', [CampgroundController::class, 'showFormAddComment']);
+    Route::post('/campgrounds/{campground}/comment', [CampgroundController::class, 'processFormAddComment']);
+    Route::get('/campgrounds/add', [CampgroundController::class, 'showAddCampground']);
+    Route::post('/campgrounds/add', [CampgroundController::class, 'processAddCampground']);
+    Route::delete('/campgrounds/{campground}', [CampgroundController::class, 'deleteCampgrounds']);
+    Route::get('/campgrounds/{campground}/edit', [CampgroundController::class, 'showEditForm']);
+    Route::put('/campgrounds/{campground}', [CampgroundController::class, 'processEditCampground']);
+});
+Route::get('/campgrounds/{campground}', [CampgroundController::class, 'showCampgroundDetail'])->name('campgroundDetail');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

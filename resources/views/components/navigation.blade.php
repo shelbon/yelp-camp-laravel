@@ -1,17 +1,13 @@
 
 <nav
-    class=" z-1000 grid grid-cols-1
-           grid-rows-[min-content_max-content_1fr]
+    class=" z-1000  flex
 			overflow-y-scroll
 			sm:overflow-hidden
 			bg-white
-			lg:grid-rows-1
 			lg:relative
 			lg:w-auto
 			lg:h-auto
-			px-8
 			pt-8
-			lg:px-28
 			lg:pt-16
 			lg:py-0"
 >
@@ -23,12 +19,12 @@
 	lg:col-span-1 lg:row-start-1
 	lg:row-end-1 lg:items-center
 	lg:flex  lg:mt-0
-	lg:px-0 lg:w-auto
+	lg:px-0 lg:w-full
 	lg:flex-row text-md sm:text-3xl tracking-wide"
     >
 
 
-        <li class="md:p-4 py-8 relative"><a href="/">Home</a></li>
+        <li class="mr-auto md:p-4 py-8 relative"><a href="/">Home</a></li>
         @guest
             <li class="md:p-4 py-8 relative"><a href="/signin">Login</a></li>
             <li class="md:p-4 py-8 relative"><a href="/signup">Sign up</a></li>
@@ -37,14 +33,13 @@
             <li class="font-bold">{{ Auth::user()->email }}</li>
             <li class="md:p-4 py-8 relative"> <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <a href="{{ route('logout') }}"  onclick="event.preventDefault();
-                                        this.closest('form').submit();"> Log Out</a>
+                    <button> Log Out</button>
 
                 </form></li>
         @endauth
     </ul>
     <x-icon id="hamburger"
-            class="cursor-pointer justify-self-end self-center   col-start-2 col-end-2 row-start-1 row-end-1 lg:hidden bg-[#f2f1ed] rounded-md text-5xl p-2"
+            class="cursor-pointer ml-auto mr-6 self-center   col-start-2 col-end-2 row-start-1 row-end-1 lg:hidden bg-[#f2f1ed] rounded-md text-5xl p-2"
             url="/assets/Hamburger Menu.svg"></x-icon>
 
 

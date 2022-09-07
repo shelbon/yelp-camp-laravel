@@ -1,0 +1,23 @@
+section .comment::after {
+    content: '';
+    position: absolute;
+    border-bottom: 1px solid #d1d1d1;
+    width: 100%;
+    right: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 0.15rem;
+    display: block;
+}
+
+.container {
+    margin-block-start: 2rem;
+    inline-size: auto;
+    margin-inline: 0;
+}
+
+.review-icon {
+    background-image: url('/assets/Chat Bubble.svg');
+    background-position: center left 0.5em;
+    background-repeat: no-repeat;
+}
