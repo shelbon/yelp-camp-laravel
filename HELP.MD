@@ -1,5 +1,4 @@
 ```php
-
 use Illuminate\Support\Facades\App;
 //example of pushing a image to s3 server named esgi-test-2
 // to the key(folder) images
