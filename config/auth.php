@@ -60,15 +60,18 @@ return [
     */
 
     'providers' => [
-        'users' => [
-            'driver' => 'eloquent',
-            'model' => App\Models\User::class,
-        ],
+//        'users' => [
+//            'driver' => 'eloquent',
+//            'model' => App\Models\User::class,
+//        ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        // DynamoDB
+        'users' => [
+            'driver' => 'dynamodb',
+            'model' => App\Models\User::class,
+            'api_token_name' => 'api_token',
+            'api_token_index' => 'api_token-index'
+        ],
     ],
 
     /*

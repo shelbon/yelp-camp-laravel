@@ -182,7 +182,6 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
-        Jenssegers\Mongodb\MongodbServiceProvider::class,
         Aws\Laravel\AwsServiceProvider::class,
         /*
          * Package Service Providers...
