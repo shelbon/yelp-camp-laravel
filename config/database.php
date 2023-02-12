@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'dynamodb'),
 
     /*
     |--------------------------------------------------------------------------
@@ -34,7 +34,6 @@ return [
     */
 
     'connections' => [
-
 
 
         'mysql' => [
@@ -57,10 +56,19 @@ return [
             ]) : [],
         ],
         'mongodb' => [
-        'driver' => 'mongodb',
-        'dsn' =>env('MONGO_URI', ''),
-        'database' => 'yelp-camp',
-        ]
+            'driver' => 'mongodb',
+            'dsn' => env('MONGO_URI', ''),
+            'database' => 'yelp-camp',
+        ],
+        'dynamodb' => [
+            'driver' => 'dynamodb',
+            'key' => env('DYNAMODB_KEY'),
+            'secret' => env('DYNAMODB_SECRET'),
+            'region' => env('DYNAMODB_REGION', 'eu-west-1'),
+            'token' => env('AWS_SESSION_TOKEN', null),
+            'endpoint' => env('DYNAMODB_ENDPOINT', null),
+            'prefix' => '', // table prefix
+        ],
 
 
     ],
@@ -95,7 +103,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
+            'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_database_'),
         ],
 
         'default' => [
