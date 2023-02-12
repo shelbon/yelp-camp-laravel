@@ -3,7 +3,9 @@
 namespace Database\Factories;
 
 use App\Models\Campground;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Collection;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Campground>
@@ -16,6 +18,7 @@ class CampgroundFactory extends Factory
      * @var string
      */
     protected $model = Campground::class;
+
     private array $places = [
         'Flats',
         'Village',
@@ -59,6 +62,13 @@ class CampgroundFactory extends Factory
         'Dusty',
         'Diamond'
     ];
+    private Collection $users;
+
+    public function __construct($count = null, ?Collection $states = null, ?Collection $has = null, ?Collection $for = null, ?Collection $afterMaking = null, ?Collection $afterCreating = null, $connection = null, ?Collection $recycle = null)
+    {
+        parent::__construct($count, $states, $has, $for, $afterMaking, $afterCreating, $connection, $recycle);
+        $this->users = User::all();
+    }
 
     /**
      * Define the model's default state.
@@ -68,18 +78,25 @@ class CampgroundFactory extends Factory
     public function definition()
     { //TODO reviews random not  own by a campground
         return [
+            "id" => $this->faker->uuid(),
             "title" => $this->sample($this->descriptors) . " " . $this->sample($this->places),
             "image" => "https://source.unsplash.com/collection/483251",
             "price" => floor(rand(10, 1000)),
             "description" => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
             "location" => fake()->address,
-            "author_id" => "62f25c37b95728eb9f09ca22",
+            "author_id" => $this->randomAuthorId(),
         ];
     }
 
     private function sample(array $array)
     {
         return $array[floor(rand(0, count($array) - 1))];
+    }
+
+    private function randomAuthorId()
+    {
+        $index = random_int(0, $this->users->count() - 1);
+        return $this->users->get($index)->id;
     }
 
 
