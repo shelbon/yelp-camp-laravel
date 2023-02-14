@@ -62,11 +62,11 @@ return [
         ],
         'dynamodb' => [
             'driver' => 'dynamodb',
-            'key' => env('DYNAMODB_KEY'),
-            'secret' => env('DYNAMODB_SECRET'),
+            'key' => env('DYNAMODB_KEY',env('AWS_LOCAL_KEY')),
+            'secret' => env('DYNAMODB_SECRET',env('AWS_LOCAL_SECRET')),
             'region' => env('DYNAMODB_REGION', 'eu-west-1'),
             'token' => env('AWS_SESSION_TOKEN', null),
-            'endpoint' => env('DYNAMODB_ENDPOINT', null),
+            'endpoint' => env('DYNAMODB_ENDPOINT',env('DYNAMODB_LOCAL_ENDPOINT')),
             'prefix' => '', // table prefix
         ],
 

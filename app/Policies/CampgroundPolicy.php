@@ -54,7 +54,7 @@ class CampgroundPolicy
      */
     public function update(?User $user, Campground $campground)
     {
-        return optional($user)->id === $campground->author->id
+        return optional($user)->id === $campground->author_id
             ? Response::allow()
             : Response::deny("you can't edit this campground,it's not your own.");
     }
@@ -68,7 +68,7 @@ class CampgroundPolicy
      */
     public function delete(?User $user, Campground $campground)
     {
-        return optional($user)->id === $campground->author->_id
+        return optional($user)->id === $campground->author_id
             ? Response::allow()
             : Response::deny("you can't delete this campground,it's not your own.");
     }

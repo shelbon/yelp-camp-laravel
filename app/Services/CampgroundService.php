@@ -5,7 +5,8 @@ namespace App\Services;
 use App\Models\Campground;
 use App\Models\Review;
 use App\Repositories\CampgroundRepository;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Illuminate\Support\Collection;
+use Ramsey\Uuid\Uuid;
 
 class CampgroundService
 {
@@ -22,17 +23,9 @@ class CampgroundService
         $this->campgroundRepository = $campgroundRepository;
     }
 
-    public function getCamprounds()
+    public function getCampgrounds(): Collection
     {
         return $this->campgroundRepository->getCampgrounds();
-    }
-
-    public function getCampgrounds($id)
-    {
-        if ($id == null || $id < 0) {
-            throw new BadRequestException();
-        }
-        return $this->campgroundRepository->getCampground($id);
     }
 
     public function create(array $data): void
@@ -62,10 +55,12 @@ class CampgroundService
 
     public function addReview(Campground $campground, $reviewData)
     {
-        $review = new Review(array(
+        $review = new Review([
+            'id' => Uuid::uuid4()->toString(),
             'body' => $reviewData['comment'],
+            'campground_id' => $reviewData["campground_id"],
             'author_id' => $reviewData['author_id']
-        ));
+        ]);
         $this->campgroundRepository->addReview($campground, $review);
     }
 }

@@ -16,5 +16,5 @@ module.exports = {
         },
     },
 
-    plugins: [require('@tailwindcss/forms')({ strategy: 'class' }), require('tailwindcss-logical')]
+    plugins: [require('@tailwindcss/forms')({ strategy: 'class' }), require('tailwindcss-logical'),require('prettier-plugin-tailwindcss')]
 };
