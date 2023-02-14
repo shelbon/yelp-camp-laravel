@@ -6,7 +6,14 @@ Codewell Yelcamp challenge's build with laravel and AWS Services
 
 https://fonts.google.com/specimen/Archivo   
 
+AWS SERVICE USED :
 
+- AWS INCOGNITO
+- AWS SES
+- AWS S3
+- AWS DYNAMODB  ✔️
+- AWS lambda
+- AWS API GATEAWAY
 
 
 
