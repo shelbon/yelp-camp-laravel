@@ -2,18 +2,25 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.0.2",
+        "aws/aws-sdk-php": "^3.258",
         "aws/aws-sdk-php-laravel": "^3.7",
         "dedoc/scramble": "^0.2.0",
         "doctrine/dbal": "^3.4",
         "guzzlehttp/guzzle": "^7.2",
+        "http-interop/http-factory-guzzle": "^1.2",
         "kitar/laravel-dynamodb": "^1.1",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.14.1",
+        "laravel/scout": "^9.8",
         "laravel/tinker": "^2.7",
+        "meilisearch/meilisearch-php": "^1.0",
         "spiral/roadrunner": "^2.8.2"
     },
     "require-dev": {
@@ -55,8 +62,10 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "artisan_xdebug": [
+            "@php -dxdebug.start_with_request=yes -dxdebug.mode=debug -dxdebug.client_port=9000 -dxdebug.client_host=127.0.0.1 artisan"
         ]
-
     },
     "extra": {
         "laravel": {
@@ -66,7 +75,10 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true

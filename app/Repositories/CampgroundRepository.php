@@ -4,7 +4,9 @@ declare(strict_types=1);
 namespace App\Repositories;
 
 use App\Models\Campground;
-use \Illuminate\Database\Eloquent\Collection;
+use App\Models\Review;
+use Illuminate\Support\Collection;
+use Ramsey\Uuid\Uuid;
 
 class CampgroundRepository
 {
@@ -13,26 +15,22 @@ class CampgroundRepository
         return Campground::all();
     }
 
-    public function getCampground($id)
-    {
-        return Campground::find($id);
-    }
-
     public function create($data): void
     {
         $campground = new Campground();
+        $campground->id = Uuid::uuid4()->toString();
         $campground->title = $data['name'];
         $campground->image = $data['image'];
         $campground->price = $data['price'];
         $campground->description = $data['description'];
-        $campground->author = $data["id"];
+        $campground->author_id = $data["id"];
         $campground->save();
     }
 
     public function delete($campground): int
     {
 
-        return Campground::destroy($campground->id);
+        return (int)$campground->delete();
     }
 
     public function edit($campground): void
@@ -43,12 +41,14 @@ class CampgroundRepository
 
     public function search(string $search)
     {
-        return Campground::whereRaw(['title' => ['$regex' => $search, '$options' => 'i']])->get();
+        return Campground::filter("title", "contains", $search)->scan();
     }
 
-    public function addReview(Campground $campground, $review)
+    public function addReview(Campground $campground, Review $review): void
     {
-        $campground->reviews()->save($review);
+        $campground->addReview($review);
+        $campground->save();
+        $review->save();
     }
 
 }

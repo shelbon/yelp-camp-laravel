@@ -17,7 +17,7 @@
                         class="text-3xl font-normal">{{$campground->price}}€/night</span>
                 </p>
                 <p>{{$campground->description}}</p>
-                <p class="mt-4">Submitted by {{$campground->author->username}}</p>
+                <p class="mt-4">Submitted by {{$campground->author?->username ?? " an anonymous user"}}</p>
             </header>
             <section class="p-16   border border-solid rounded ">
 

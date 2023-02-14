@@ -13,7 +13,7 @@
             @endif
                 <form class="flex flex-col" method="post" action="/campgrounds/add">
                     {{ csrf_field() }}
-                    <input name="id" value="{{Auth::user()->_id ?? ''}}"  hidden/>
+                    <input name="id" value="{{Auth::user()->id ?? ''}}"  hidden/>
                     <label for="name">Campground name</label>
                     <input class="form-input" id="name" name="name"  type="text" placeholder="campground name" value="{{old('name')}}" required>
 

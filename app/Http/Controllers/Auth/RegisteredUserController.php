@@ -9,7 +9,6 @@ use App\Services\UserService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
@@ -25,26 +24,25 @@ class RegisteredUserController extends Controller
     }
 
     /**
-     * Display the registration view.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function create()
-    {
-        return view('auth.signup');
-    }
-
-    /**
      * Handle an incoming registration request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\RedirectResponse
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request) {
-        $validated=$request->validate([
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+    public function store(Request $request)
+    {
+        if (empty($request->input())) {
+            return redirect()->route('register');
+        }
+        $validated = $request->validate([
+            'email' => ['required', 'string', 'email', 'max:255', function ($attribute, $value, $fail) {
+                $user = User::filter('email', "=", $value)->scan()->first();
+                if ($user) {
+                    $fail('The ' . $attribute . ' has already been taken.');
+                }
+            }],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $user = $this->userService->create($validated);
@@ -54,5 +52,15 @@ class RegisteredUserController extends Controller
         Auth::login($user);
 
         return redirect(RouteServiceProvider::HOME);
+    }
+
+    /**
+     * Display the registration view.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function create()
+    {
+        return view('auth.signup');
     }
 }

@@ -12,10 +12,10 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\Request;
 
 class CampgroundController extends Controller
 {
@@ -33,9 +33,16 @@ class CampgroundController extends Controller
         if ($request->search) {
             return $this->search($request);
         }
-        //eager load relationship to mitigate the N+1 problem
-        $campground = $this->campgroundService->getCamprounds()->load('author');
-        return view('campgrounds.home', ['campgrounds' => $campground]);
+        try {
+            $campgrounds = $this->campgroundService->getCampgrounds()->map(static function (Campground $campground) {
+                return $campground->withAuthor();
+            });
+        } catch (\Exception $e) {
+            Debugbar::addMessage($e->getMessage());
+            abort(500, "Unknown error happened when loading campgrounds");
+        }
+
+        return view('campgrounds.home', ['campgrounds' => $campgrounds]);
     }
 
     private function search(Request $request): Factory|View|Application
@@ -47,13 +54,12 @@ class CampgroundController extends Controller
         return view('campgrounds.home', ['campgrounds' => $this->campgroundService->search($request->search)]);
     }
 
-    public function showCampgroundDetail(Campground $campground): Factory|View|Application
+    public function showCampgroundDetail(string $campgroundId): Factory|View|Application
     {
         //eager load relationships to mitigate the N+1 problem
-        $campground = $campground->load(['author', 'reviews' => [
-            'author'
-        ]]);
-
+        $campground = Campground::find($campgroundId)?->withReviews()
+            ?->withAuthor();
+        $campground->reviews=$campground->reviews->sortBy('created_at');
         return view('campgrounds.detail', ['campground' => $campground]);
     }
 
@@ -66,7 +72,7 @@ class CampgroundController extends Controller
     public function processAddCampground(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'id' => ['required', 'alpha_num', new UserExist($this->userService)],
+            'id' => ['required', 'uuid', new UserExist($this->userService)],
             'name' => 'required|max:255',
             'description' => 'required|max:255',
             'price' => 'required|numeric',
@@ -105,7 +111,7 @@ class CampgroundController extends Controller
 
         }
         $newCampground = $request->validate([
-            'id' => 'required|alpha_num',
+            'id' => 'required|uuid',
             'title' => 'required|max:255',
             'description' => 'required|max:255',
             'price' => 'required|numeric',
@@ -117,14 +123,14 @@ class CampgroundController extends Controller
 
     public function showFormAddComment(Campground $campground, User $user): Factory|View|Application
     {
-        return view('campgrounds.new-comment', ['campground' => $campground, 'userId' => Auth::user()->_id]);
+        return view('campgrounds.new-comment', ['campground' => $campground, 'userId' => Auth::user()->id]);
     }
 
     public function processFormAddComment(Campground $campground, Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'author_id' => ['required', 'alpha_num', new UserExist($this->userService)],
-            'campground_id' => 'required|alpha_num',
+            'author_id' => ['required', 'uuid', new UserExist($this->userService)],
+            'campground_id' => 'required|uuid',
             'comment' => 'required|max:255'
         ]);
         $this->campgroundService->addReview($campground, $validated);

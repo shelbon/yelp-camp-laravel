@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
+use Aws\DynamoDb\Exception\DynamoDbException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use MongoDB\Driver\Exception\ConnectionTimeoutException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
         $this->reportable(function (Throwable $e) {
             //
         });
-        $this->renderable(function (ConnectionTimeoutException $e,$request){
+        $this->renderable(function (DynamoDbException $e,$request){
 
             return response()->view('errors.500',[],500);
 

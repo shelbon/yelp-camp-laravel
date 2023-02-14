@@ -3,31 +3,29 @@ declare(strict_types=1);
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Jenssegers\Mongodb\Eloquent\Model;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Kitar\Dynamodb\Model\Model;
 
 class Review extends Model
 {
     use HasFactory;
 
-    protected $primaryKey = '_id';
-
-    protected $connection = 'mongodb';
+    protected $primaryKey = "id";
+    protected $table = "Reviews";
     protected $attributes = [
-        'body', 'author_id'
+        'id', 'body', 'author_id', 'campground_id', 'created_at', 'updated_at'
     ];
     protected $fillable = [
-        'body', 'author_id'
+        'id', 'body', 'author_id', 'campground_id'
     ];
 
-    public function author()
+    public function withAuthor(): Review
     {
-        return $this->belongsTo(User::class, 'author_id', '_id');
+        $review = clone $this;
+        $review->author = User::filter("id", "=", $this->author_id)
+            ->scan()?->first();
+        return $review;
     }
 
-    public function campground()
-    {
-        return $this->belongsTo(Campground::class);
-    }
 }
