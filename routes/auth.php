@@ -3,18 +3,18 @@
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
-use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\RegisteredUserController2;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('signup', [RegisteredUserController::class, 'create'])
+    Route::get('signup', [RegisteredUserController::class, 'show'])
                 ->name('register');
 
-    Route::post('signup', [RegisteredUserController::class, 'store']);
+    Route::post('signup', [RegisteredUserController::class, 'register']);
 
     Route::get('signin', [AuthenticatedSessionController::class, 'create'])
                 ->name('login');
@@ -35,16 +35,12 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware('auth')->group(function () {
-    Route::get('verify-email', [EmailVerificationPromptController::class, '__invoke'])
-                ->name('verification.notice');
-
-    Route::get('verify-email/{id}/{hash}', [VerifyEmailController::class, '__invoke'])
-                ->middleware(['signed', 'throttle:6,1'])
-                ->name('verification.verify');
-
-    Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])
-                ->middleware('throttle:6,1')
-                ->name('verification.send');
+    Route::get('/email/verify', [VerifyEmailController::class, 'show'])
+        ->name('verification.show')->middleware("signed");
+    Route::post('/email/verify', [VerifyEmailController::class, 'verify'])
+        ->name('verification.verify');
+    Route::post('/email/resend', [VerifyEmailController::class, 'resend'])
+        ->name('verification.resend');
 
     Route::get('confirm-password', [ConfirmablePasswordController::class, 'show'])
                 ->name('password.confirm');

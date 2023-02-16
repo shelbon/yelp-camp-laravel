@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Cognito\CognitoClient;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
@@ -9,34 +10,66 @@ use App\Services\UserService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
 
 class RegisteredUserController extends Controller
 {
-    private UserService $userService;
 
     /**
-     * @param UserService $userService
+     * Where to redirect users after registration.
+     *
+     * @var string
      */
+    protected string $redirectTo = RouteServiceProvider::HOME;
+    private UserService $userService;
+
     public function __construct(UserService $userService)
     {
+        $this->middleware('guest');
         $this->userService = $userService;
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    public function store(Request $request)
+    public function register(Request $request)
     {
-        if (empty($request->input())) {
-            return redirect()->route('register');
+        $validator = $this->validator($request->all())->validate();
+        //Create credentials object
+        $collection = collect($request->all());
+        $data = $collection->only('email', 'password'); //passing 'password' is optional.
+
+        $this->validator($request->all())->validate();
+
+        $attributes = [];
+
+        $userFields = ['password', 'email'];
+
+        foreach ($userFields as $userField) {
+
+            if ($request->$userField === null) {
+                throw new \Exception("The configured user field $userField is not provided in the request.");
+            }
+
+            $attributes[$userField] = $request->$userField;
         }
-        $validated = $request->validate([
+
+        app()->make(CognitoClient::class)->register($request->email, $request->password, $attributes);
+        $user = $this->create($request->all());
+        event(new Registered($user));
+        Auth::login($user);
+        //Redirect to view
+        return Redirect::temporarySignedRoute("verification.show",now()->addMinute(10), ['email' => $user->email]);
+    }
+
+    protected function validator(array $data)
+    {
+        $messages = [
+            'email.required' => 'Email is required.',
+            'email.string' => 'The given email is invalid.',
+            'email.email' => 'The given email is invalid.',
+            'password.confirmed' => 'Password Confirmation should match the Password'
+        ];
+        return validator::make($data, [
             'email' => ['required', 'string', 'email', 'max:255', function ($attribute, $value, $fail) {
                 $user = User::filter('email', "=", $value)->scan()->first();
                 if ($user) {
@@ -44,14 +77,18 @@ class RegisteredUserController extends Controller
                 }
             }],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
-        $user = $this->userService->create($validated);
+        ], $messages);
+    }
 
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param array $data
+     * @return User
+     */
+    protected function create(array $data): User
+    {
+        return $this->userService->create($data);
     }
 
     /**
@@ -59,8 +96,10 @@ class RegisteredUserController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function create()
+    public function show()
     {
         return view('auth.signup');
     }
+
+
 }
