@@ -151,6 +151,13 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
+            'invalid_user' => 'We can\'t find a user with that email address.',
+            'invalid_token' => 'The Verification Code does not match.',
+            'confirmed' => 'User cannot be confirmed. Current status is CONFIRMED',
+            'resending' => 'Sending email... please wait...',
+            'resend' => 'New email sent, please check your email for a verification code.',
+            'required' => 'The email address is required.',
+            'exceeded' => 'Attempt limit exceeded, please try after some time.'
         ],
     ],
 

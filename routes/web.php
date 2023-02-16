@@ -20,7 +20,8 @@ use App\Models\User;
 
 Route::get('/', [HomeController::class, 'home']);
 Route::get('/campgrounds', [CampgroundController::class, 'home']);
-Route::middleware(['auth'])->group(function () {
+
+Route::middleware(['auth',"verified"])->group(function () {
     Route::get('/campgrounds/{campground}/comment', [CampgroundController::class, 'showFormAddComment']);
     Route::post('/campgrounds/{campground}/comment', [CampgroundController::class, 'processFormAddComment']);
     Route::get('/campgrounds/add', [CampgroundController::class, 'showAddCampground']);
