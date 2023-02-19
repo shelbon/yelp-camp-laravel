@@ -4,6 +4,12 @@
     </x-slot:title>
     <!-- Validation Errors -->
     <x-auth-validation-errors class="mb-4" :errors="$errors" />
+    @if($errors->has(\App\Cognito\CognitoClient::CODE_DELIVERY_FAILURE_EXCEPTION))
+        <x-flash-message type="info">
+            {{ __('validation.info-email-verification-link')}}
+            <a href='{{$verifyUrl}}' class='text-blue-900 underline underline-offset-1 text-bold'><p>{{__("here")}}</p></a>
+        </x-flash-message>
+    @endif
 <form
     class="flex flex-col   md:pr-[35%] lg:pr-0"
     action="{{ route('register') }}"

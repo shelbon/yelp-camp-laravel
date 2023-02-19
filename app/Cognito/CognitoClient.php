@@ -18,8 +18,9 @@ class CognitoClient
     const INVALID_PASSWORD = 'InvalidPasswordException';
     const CODE_MISMATCH = 'CodeMismatchException';
     const EXPIRED_CODE = 'ExpiredCodeException';
-   const NOT_AUTHORIZED_EXCEPTION="NotAuthorizedException";
-
+    const NOT_AUTHORIZED_EXCEPTION = "NotAuthorizedException";
+    const USER_NOT_CONFIRMED_EXCEPTION = "UserNotConfirmedException";
+    const CODE_DELIVERY_FAILURE_EXCEPTION = "CodeDeliveryFailureException";
     protected CognitoIdentityProviderClient $client;
 
 
@@ -54,6 +55,7 @@ class CognitoClient
      */
     public function authenticate(string $email, string $password): Result|bool
     {
+        $response = null;
         try {
             $secret = env("AWS_COGNITO_CLIENT_SECRET");
             $response = $this->client->adminInitiateAuth([
@@ -71,11 +73,16 @@ class CognitoClient
                 $exception->getAwsErrorCode() === self::USER_NOT_FOUND) {
                 return false;
             }
-             if($exception->getAwsErrorCode() === self::NOT_AUTHORIZED_EXCEPTION) {
-                 throw   ValidationException::withMessages([
-                     "email" => trans('auth.failed'),
-                 ]);
-             }
+            if ($exception->getAwsErrorCode() === self::NOT_AUTHORIZED_EXCEPTION) {
+                throw   ValidationException::withMessages([
+                    "email" => trans('auth.failed'),
+                ]);
+            }
+            if ($exception->getAwsErrorCode() === self::USER_NOT_CONFIRMED_EXCEPTION) {
+                throw   ValidationException::withMessages([
+                    self::USER_NOT_CONFIRMED_EXCEPTION => trans('auth.account_not_confirmed'),
+                ]);
+            }
 
         }
 
@@ -136,13 +143,15 @@ class CognitoClient
             if ($e->getAwsErrorCode() === self::USERNAME_EXISTS) {
                 return false;
             }
-
-            throw $e;
+            if ($e->getAwsErrorCode() === self::CODE_DELIVERY_FAILURE_EXCEPTION) {
+                throw   ValidationException::withMessages([
+                    self::CODE_DELIVERY_FAILURE_EXCEPTION => trans('auth.account_send_verification_code_failure'),
+                ]);
+            }
         }
 
         $this->setUserAttributes($email, ['email_verified' => 'true']);
-
-        return (bool)$response['UserConfirmed'];
+        return isset($response) && (bool)$response['UserConfirmed'];
     }
 
     /**

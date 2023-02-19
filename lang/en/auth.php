@@ -17,5 +17,6 @@ return [
     'field_missing'=>'Some field was missing.',
     'password' => 'The provided password is incorrect.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
-
+    'account_not_confirmed' => 'Your account has not been confirmed yet.',
+    'account_send_verification_code_failure'=> 'We were unable to send the verification code',
 ];

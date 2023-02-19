@@ -45,6 +45,7 @@ return [
     'distinct' => 'The :attribute field has a duplicate value.',
     'doesnt_start_with' => 'The :attribute may not start with one of the following: :values.',
     'email' => 'The :attribute must be a valid email address.',
+    'info-email-verification-link'=>"You can verify your account by clicking",
     'ends_with' => 'The :attribute must end with one of the following: :values.',
     'enum' => 'The selected :attribute is invalid.',
     'exists' => 'The selected :attribute is invalid.',
@@ -136,6 +137,13 @@ return [
     'uploaded' => 'The :attribute failed to upload.',
     'url' => 'The :attribute must be a valid URL.',
     'uuid' => 'The :attribute must be a valid UUID.',
+    'invalid_user' => 'We can\'t find a user with that email address.',
+    'invalid_token' => 'The Verification Code does not match.',
+    'confirmed' => 'User cannot be confirmed. Current status is CONFIRMED',
+    'resending' => 'Sending email... please wait...',
+    'resend' => 'New email sent, please check your email for a verification code.',
+    'required' => 'The email address is required.',
+    'exceeded' => 'Attempt limit exceeded, please try after some time.',
 
     /*
     |--------------------------------------------------------------------------
@@ -151,13 +159,6 @@ return [
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',
-            'invalid_user' => 'We can\'t find a user with that email address.',
-            'invalid_token' => 'The Verification Code does not match.',
-            'confirmed' => 'User cannot be confirmed. Current status is CONFIRMED',
-            'resending' => 'Sending email... please wait...',
-            'resend' => 'New email sent, please check your email for a verification code.',
-            'required' => 'The email address is required.',
-            'exceeded' => 'Attempt limit exceeded, please try after some time.'
         ],
     ],
 

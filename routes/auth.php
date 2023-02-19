@@ -33,10 +33,9 @@ Route::middleware('guest')->group(function () {
     Route::post('reset-password', [NewPasswordController::class, 'store'])
                 ->name('password.update');
 });
-
+Route::get('/email/verify', [VerifyEmailController::class, 'show'])
+    ->name('verification.show')->middleware("signed");
 Route::middleware('auth')->group(function () {
-    Route::get('/email/verify', [VerifyEmailController::class, 'show'])
-        ->name('verification.show')->middleware("signed");
     Route::post('/email/verify', [VerifyEmailController::class, 'verify'])
         ->name('verification.verify');
     Route::post('/email/resend', [VerifyEmailController::class, 'resend'])
