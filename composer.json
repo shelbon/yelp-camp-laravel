@@ -11,6 +11,8 @@
         "php": "^8.0.2",
         "aws/aws-sdk-php": "^3.258",
         "aws/aws-sdk-php-laravel": "^3.7",
+        "bref/bref": "^1.7",
+        "bref/laravel-bridge": "^1.2",
         "dedoc/scramble": "^0.2.0",
         "doctrine/dbal": "^3.4",
         "guzzlehttp/guzzle": "^7.2",
