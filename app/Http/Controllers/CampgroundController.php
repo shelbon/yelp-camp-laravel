@@ -57,8 +57,8 @@ class CampgroundController extends Controller
 
     public function showCampgroundDetail(string $campgroundId): Factory|View|Application
     {
-        //eager load relationships to mitigate the N+1 problem
-        $campground = Campground::find($campgroundId)?->withReviews()
+
+        $campground = Campground::find($campgroundId)?->withReviewsAndRelationships()
             ?->withAuthor();
         if(isset($campground->reviews)) {
             $campground->reviews = $campground?->reviews?->sortBy('created_at');

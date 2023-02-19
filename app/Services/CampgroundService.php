@@ -14,19 +14,11 @@ use Ramsey\Uuid\Uuid;
 
 class CampgroundService
 {
-    /**
-     * @var CampgroundRepository
-     */
-    private CampgroundRepository $campgroundRepository;
 
 
-    /**
-     * @param CampgroundRepository $campgroundRepository
-     */
-    public function __construct(CampgroundRepository $campgroundRepository, CampgroundImageService $campgroundImageService)
+    public function __construct(private CampgroundRepository $campgroundRepository, private CampgroundImageService $campgroundImageService)
     {
-        $this->campgroundRepository = $campgroundRepository;
-        $this->campgroundImageService = $campgroundImageService;
+
     }
 
     public function getCampgrounds(): Collection
@@ -76,8 +68,12 @@ class CampgroundService
 
     public function delete(Campground $campground): int
     {
-
+        $image = $campground->getImage();
+        if (!str_contains($image->getKey(), env("AWS_S3_ASSETS_KEY"))) {
+            $this->campgroundImageService->delete();
+        }
         return $this->campgroundRepository->delete($campground);
+
     }
 
     public function search(string $search)

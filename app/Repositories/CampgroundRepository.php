@@ -27,9 +27,16 @@ class CampgroundRepository
         $campground->save();
     }
 
-    public function delete($campground): int
+    public function delete(Campground $campground): int
     {
-
+        $reviews = $campground->reviews();
+        $reviewsIds =
+            $reviews->map(function ($review) {
+                return [
+                    "id" => $review->id
+                ];
+            });
+        Review::batchDeleteItem($reviewsIds);
         return (int)$campground->delete();
     }
 
