@@ -20,7 +20,7 @@ class CampgroundRepository
         $campground = new Campground();
         $campground->id = Uuid::uuid4()->toString();
         $campground->title = $data['name'];
-        $campground->image = $data['image'];
+        $campground->image = json_encode($data['image'],);
         $campground->price = $data['price'];
         $campground->description = $data['description'];
         $campground->author_id = $data["id"];

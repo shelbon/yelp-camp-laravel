@@ -18,6 +18,7 @@ class Campground extends Model
     protected $attributes = [
         'title', 'image', 'price', 'description', 'location', "author_id",
     ];
+
     public function withReviews(): Campground
     {
 
@@ -55,6 +56,15 @@ class Campground extends Model
     {
         return $this->filter($field, "=", $value)
             ->scan();
+
+    }
+
+    public function getImage(): ?Image
+    {
+        if (!filter_var($this->attributes["image"], FILTER_VALIDATE_URL)) {
+            return Image::createFromArray(json_decode($this->attributes["image"], true));
+        }
+        return null;
 
     }
 
