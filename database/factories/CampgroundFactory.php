@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Campground;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Collection;
@@ -77,14 +78,18 @@ class CampgroundFactory extends Factory
      */
     public function definition()
     { //TODO reviews random not  own by a campground
+        $authorId=$this->randomAuthorId();
         return [
             "id" => $this->faker->uuid(),
             "title" => $this->sample($this->descriptors) . " " . $this->sample($this->places),
-            "image" => "https://source.unsplash.com/collection/483251",
+            "image" => json_encode(new Image(env("AWS_S3_ENDPOINT")."/".env("AWS_S3_ASSETS_KEY")."image-not-found.png", env("AWS_BUCKET"),
+                env("AWS_S3_ASSETS_KEY"),
+                "",
+                "image-not-found.png")),
             "price" => floor(rand(10, 1000)),
             "description" => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam dolores vero perferendis laudantium, consequuntur voluptatibus nulla architecto, sit soluta esse iure sed labore ipsam a cum nihil atque molestiae deserunt!',
             "location" => fake()->address,
-            "author_id" => $this->randomAuthorId(),
+            "author_id" =>$authorId,
         ];
     }
 
