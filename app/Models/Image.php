@@ -39,6 +39,9 @@ class Image implements JsonSerializable
 
     public function getKey(): string
     {
+        if(empty($this->userId)){
+            return $this->key.$this->name;
+        }
         return $this->key.$this->userId."-".$this->name;
     }
 

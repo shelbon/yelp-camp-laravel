@@ -19,11 +19,11 @@ class Campground extends Model
         'title', 'image', 'price', 'description', 'location', "author_id",
     ];
 
-    public function withReviews(): Campground
+    public function withReviewsAndRelationships(): Campground
     {
 
         $campground = clone $this;
-        $reviews = Review::filter("campground_id", "=", $campground->id)->scan();
+        $reviews =$this->reviews() ;
         $reviews = $reviews->map(function ($review) {
             return $review->withAuthor();
         });
@@ -31,7 +31,12 @@ class Campground extends Model
 
         return $campground;
     }
-
+    public function reviews(): Collection
+    {
+       return Review::index("reviewsByCampground-index")
+        ->keyCondition("campground_id", '=',$this->id)
+        ->query();
+    }
     public function withAuthor(): Campground
     {
         $campground = clone $this;
