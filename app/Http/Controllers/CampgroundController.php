@@ -60,7 +60,10 @@ class CampgroundController extends Controller
         //eager load relationships to mitigate the N+1 problem
         $campground = Campground::find($campgroundId)?->withReviews()
             ?->withAuthor();
-        $campground->reviews = $campground->reviews->sortBy('created_at');
+        if(isset($campground->reviews)) {
+            $campground->reviews = $campground?->reviews?->sortBy('created_at');
+        }
+
         return view('campgrounds.detail', ['campground' => $campground]);
     }
 

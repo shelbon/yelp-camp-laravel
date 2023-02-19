@@ -27,7 +27,6 @@ class VerifyEmailController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
         $this->middleware('signed')->only('verify');
         $this->middleware('throttle:6,1')->only('verify', 'resend');
     }
@@ -60,19 +59,19 @@ class VerifyEmailController extends Controller
         if ($response == 'validation.invalid_user') {
             return redirect()->back()
                 ->withInput($request->only('email'))
-                ->withErrors(['email' => trans('black-bits/laravel-cognito-auth::validation.invalid_user')]);
+                ->withErrors(['email' => trans('validation.invalid_user')]);
         }
 
         if ($response == 'validation.invalid_token') {
             return redirect()->back()
                 ->withInput($request->only('email'))
-                ->withErrors(['confirmation_code' => trans('black-bits/laravel-cognito-auth::validation.invalid_token')]);
+                ->withErrors(['confirmation_code' => trans('validation.invalid_token')]);
         }
 
         if ($response == 'validation.exceeded') {
             return redirect()->back()
                 ->withInput($request->only('email'))
-                ->withErrors(['confirmation_code' => trans('black-bits/laravel-cognito-auth::validation.exceeded')]);
+                ->withErrors(['confirmation_code' => trans('validation.exceeded')]);
         }
 
         if ($response == 'validation.confirmed') {
@@ -108,22 +107,4 @@ class VerifyEmailController extends Controller
         return response()->json(['success' => 'true']);
     }
 
-//    /**
-//     * Mark the authenticated user's email address as verified.
-//     *
-//     * @param  \Illuminate\Foundation\Auth\EmailVerificationRequest  $request
-//     * @return \Illuminate\Http\RedirectResponse
-//     */
-//    public function __invoke(EmailVerificationRequest $request)
-//    {
-//        if ($request->user()->hasVerifiedEmail()) {
-//            return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
-//        }
-//
-//        if ($request->user()->markEmailAsVerified()) {
-//            event(new Verified($request->user()));
-//        }
-//
-//        return redirect()->intended(RouteServiceProvider::HOME.'?verified=1');
-//    }
 }

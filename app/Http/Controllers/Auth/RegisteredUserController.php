@@ -6,13 +6,14 @@ use App\Cognito\CognitoClient;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
+use App\Services\GenerateEmailVerificationRouteService;
 use App\Services\UserService;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules;
+use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
@@ -24,11 +25,13 @@ class RegisteredUserController extends Controller
      */
     protected string $redirectTo = RouteServiceProvider::HOME;
     private UserService $userService;
+    private GenerateEmailVerificationRouteService $generateEmailVerificationRouteService;
 
-    public function __construct(UserService $userService)
+    public function __construct(UserService $userService, GenerateEmailVerificationRouteService $generateEmailVerificationRouteService)
     {
         $this->middleware('guest');
         $this->userService = $userService;
+        $this->generateEmailVerificationRouteService = $generateEmailVerificationRouteService;
     }
 
     public function register(Request $request)
@@ -58,7 +61,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
         Auth::login($user);
         //Redirect to view
-        return Redirect::temporarySignedRoute("verification.show",now()->addMinute(10), ['email' => $user->email]);
+        return redirect($this->generateEmailVerificationRouteService->generate($user->getAuthIdentifier()));
     }
 
     protected function validator(array $data)
@@ -94,11 +97,12 @@ class RegisteredUserController extends Controller
     /**
      * Display the registration view.
      *
-     * @return \Illuminate\View\View
+     * @return View
      */
     public function show()
     {
-        return view('auth.signup');
+        $verifyUrl=$this->generateEmailVerificationRouteService->generate((string)auth::user()?->getAuthIdentifier());
+        return view('auth.signup',["verifyUrl" => $verifyUrl]);
     }
 
 
