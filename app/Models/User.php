@@ -12,7 +12,8 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Model implements AuthenticatableContract
 {
     use Authenticatable, HasApiTokens, HasFactory, Notifiable;
-   protected $table="Users";
+
+    protected $table = "Users";
     /**
      * The attributes that are mass assignable.
      *
@@ -34,13 +35,6 @@ class User extends Model implements AuthenticatableContract
         'password',
         'remember_token',
     ];
-    public static function find($email)
-    {
-        return parent::index("EmailUser")
-            ->keyCondition("email", '=',$email)
-            ->query()
-            ->first();
-    }
     /**
      * The attributes that should be cast.
      *
@@ -50,9 +44,27 @@ class User extends Model implements AuthenticatableContract
         'email_verified_at' => 'datetime',
     ];
 
+    public static function find($email)
+    {
+        return parent::index("EmailUser")
+            ->keyCondition("email", '=', $email)
+            ->query()
+            ->first();
+    }
+
     public function getAuthIdentifierName()
     {
         return 'email';
+    }
+
+    public function getName()
+    {
+        return $this->email;
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
 

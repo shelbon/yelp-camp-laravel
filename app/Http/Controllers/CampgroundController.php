@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Redirect;
 
+
 class CampgroundController extends Controller
 {
     private CampgroundService $campgroundService;
@@ -59,7 +60,7 @@ class CampgroundController extends Controller
         //eager load relationships to mitigate the N+1 problem
         $campground = Campground::find($campgroundId)?->withReviews()
             ?->withAuthor();
-        $campground->reviews=$campground->reviews->sortBy('created_at');
+        $campground->reviews = $campground->reviews->sortBy('created_at');
         return view('campgrounds.detail', ['campground' => $campground]);
     }
 
@@ -76,7 +77,7 @@ class CampgroundController extends Controller
             'name' => 'required|max:255',
             'description' => 'required|max:255',
             'price' => 'required|numeric',
-            'image' => 'required|url'
+            'image' => 'required|mimes:jpeg,jpg,png,gif,bmp,svg',
         ]);
         $this->campgroundService->create($validated);
         return Redirect::back()->with(['success' => "campground created"]);
@@ -115,7 +116,7 @@ class CampgroundController extends Controller
             'title' => 'required|max:255',
             'description' => 'required|max:255',
             'price' => 'required|numeric',
-            'image' => 'required|url'
+            'image' => 'nullable|mimes:jpeg,jpg,png,gif,bmp,svg,tiff',
         ]);
         $this->campgroundService->edit($newCampground, $campground);
         return Redirect::back()->with(['success' => "campground edited"]);
@@ -128,12 +129,16 @@ class CampgroundController extends Controller
 
     public function processFormAddComment(Campground $campground, Request $request): RedirectResponse
     {
+
+
         $validated = $request->validate([
             'author_id' => ['required', 'uuid', new UserExist($this->userService)],
             'campground_id' => 'required|uuid',
             'comment' => 'required|max:255'
         ]);
+        $request->session()->regenerateToken();
         $this->campgroundService->addReview($campground, $validated);
+
         return \redirect('/campgrounds/' . $campground->id);
     }
 }

@@ -4,13 +4,16 @@
     </x-slot:title>
     <section>
         <header>
-            <x-navigation  ></x-navigation>
+            <x-navigation></x-navigation>
             <section class=" p-8   flex flex-col space-y-2 bg-[#f9f6f1] text-start">
                 <div class=" p-8 md:w-2/5 space-y-4">
                     <h1 class="font-bold subpixel-antialiased text-5xl md:text-4xl">Welcome to YelpCamp</h1>
-                    <p class="text-[#3E3C3A]">View our hand-picker campgrounds from all overt the world, or add your own.</p>
+                    <p class="text-[#3E3C3A]">View our hand-picker campgrounds from all overt the world, or add your
+                        own.</p>
                     @foreach ($errors->all() as $error)
-                        <x-flash-message type="error" texte="{{ $error}}"></x-flash-message>
+                        <x-flash-message type="error">
+                            {{ $error}}
+                        </x-flash-message>
                     @endforeach
                     <form class="flex flex-col" method="GET">
 
@@ -63,7 +66,8 @@
                                              src="https://api.iconify.design/charm/cross.svg?color=%23b91c1c"/></button>
                                 </form>
                             @endif
-                            <img class="aspect-square w-full rounded-lg grid-row-start-1 grid-row-end-1" src="{{$campground->image}}"
+                            <img class="aspect-square w-full rounded-lg grid-row-start-1 grid-row-end-1"
+                                 src="{{$campground->getImage()?->getUrl()?? Storage::url(env('AWS_S3_KEY')."image-not-found.png")}}"
                                  alt="campground thumbnail"/>
                             <section class="grid-row-start-2 grid-row-end-2">
                                 <h2 class=" mx-4 my-4 font-bold subpixel-antialiased text-2xl">{{$campground->title}}</h2>

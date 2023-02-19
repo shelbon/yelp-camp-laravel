@@ -20,7 +20,9 @@
         "laravel/sanctum": "^2.14.1",
         "laravel/scout": "^9.8",
         "laravel/tinker": "^2.7",
+        "league/flysystem-aws-s3-v3": "^3.12",
         "meilisearch/meilisearch-php": "^1.0",
+        "predis/predis": "^2.1",
         "spiral/roadrunner": "^2.8.2"
     },
     "require-dev": {
