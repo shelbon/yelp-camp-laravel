@@ -39,3 +39,9 @@ container_commands:
   03_build_node_assets:
     command: "sudo npm run build"
     cwd: "/var/app/staging"
+files:
+  /opt/elasticbeanstalk/tasks/taillogs.d/laravel-logs.conf:
+    content: /var/app/current/storage/logs/laravel.log
+    group: root
+    mode: "000755"
+    owner: root
