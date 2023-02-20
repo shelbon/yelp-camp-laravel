@@ -3,11 +3,7 @@ branch-defaults:
     environment: Yelpcamp-env
   splade-integration:
     environment: Yelpcamp-env
-container_commands:
-  00_install_composer_dependencies:
-    command: sudo php -d memory_limit=-1 /usr/bin/composer.phar install --no-dev --no-interaction
-      --prefer-dist --optimize-autoloader
-    cwd: /var/app/staging
+
 environment-defaults:
   Yelpcamp-env:
     branch: null
@@ -31,3 +27,15 @@ option_settings:
   aws:elasticbeanstalk:container:php:phpini:
     composer_options: --no-dev
     document_root: /public
+
+container_commands:
+  00_install_composer_dependencies:
+    command: "sudo php -d memory_limit=-1 /usr/bin/composer.phar install --no-dev --no-interaction --prefer-dist --optimize-autoloader"
+    cwd: "/var/app/staging"
+  02_install_node_dependencies:
+    command: "sudo npm install"
+    cwd: "/var/app/staging"
+
+  03_build_node_assets:
+    command: "sudo npm run build"
+    cwd: "/var/app/staging"
