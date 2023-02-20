@@ -32,6 +32,10 @@ container_commands:
   00_install_composer_dependencies:
     command: "sudo php -d memory_limit=-1 /usr/bin/composer.phar install --no-dev --no-interaction --prefer-dist --optimize-autoloader"
     cwd: "/var/app/staging"
+  01_node_install:
+    cwd: /tmp
+    test: '[ ! -f /usr/bin/node ] && echo "node not installed"'
+    command: 'yum install -y nodejs --enablerepo=epel'
   02_install_node_dependencies:
     command: "sudo npm install"
     cwd: "/var/app/staging"
