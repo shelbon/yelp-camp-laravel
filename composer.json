@@ -11,21 +11,15 @@
         "php": "^8.0.2",
         "aws/aws-sdk-php": "^3.258",
         "aws/aws-sdk-php-laravel": "^3.7",
-        "bref/bref": "^1.7",
-        "bref/laravel-bridge": "^1.2",
-        "dedoc/scramble": "^0.2.0",
         "doctrine/dbal": "^3.4",
         "guzzlehttp/guzzle": "^7.2",
         "http-interop/http-factory-guzzle": "^1.2",
         "kitar/laravel-dynamodb": "^1.1",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^2.14.1",
-        "laravel/scout": "^9.8",
         "laravel/tinker": "^2.7",
         "league/flysystem-aws-s3-v3": "^3.12",
-        "meilisearch/meilisearch-php": "^1.0",
-        "predis/predis": "^2.1",
-        "spiral/roadrunner": "^2.8.2"
+        "predis/predis": "^2.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",

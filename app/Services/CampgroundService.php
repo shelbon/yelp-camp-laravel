@@ -69,8 +69,8 @@ class CampgroundService
     public function delete(Campground $campground): int
     {
         $image = $campground->getImage();
-        if (!str_contains($image->getKey(), env("AWS_S3_ASSETS_KEY"))) {
-            $this->campgroundImageService->delete();
+        if ($image &&!str_contains($image?->getKey(), env("AWS_S3_ASSETS_KEY"))) {
+            $this->campgroundImageService->delete($image);
         }
         return $this->campgroundRepository->delete($campground);
 

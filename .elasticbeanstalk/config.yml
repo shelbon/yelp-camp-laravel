@@ -1,11 +1,18 @@
 branch-defaults:
+  default:
+    environment: Yelpcamp-prod
   deploy-to-aws:
-    environment: Yelpcamp-env
+    environment: Yelpcamp-prod
+    group_suffix: null
+  elastic-beanstalk-ready:
+    environment: yelpcamp-prod
   splade-integration:
-    environment: Yelpcamp-env
-
+    environment: Yelpcamp-prod
 environment-defaults:
   Yelpcamp-env:
+    branch: null
+    repository: null
+  Yelpcamp-prod:
     branch: null
     repository: null
 global:
