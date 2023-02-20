@@ -1,0 +1,32 @@
+branch-defaults:
+  splade-integration:
+    environment: Yelpcamp-env
+environment-defaults:
+  Yelpcamp-env:
+    branch: null
+    repository: null
+global:
+  application_name: yelp-camp
+  default_ec2_keyname: ec2
+  default_platform: PHP 8.1 running on 64bit Amazon Linux 2
+  default_region: eu-west-1
+  include_git_submodules: true
+  instance_profile: null
+  platform_name: null
+  platform_version: null
+  profile: eb-cli
+  sc: git
+  workspace_type: Application
+option_settings:
+  aws:elasticbeanstalk:container:php:phpini:
+    document_root: /public
+    composer_options: --no-dev
+
+  aws:elasticbeanstalk:application:environment:
+        option_name: COMPOSER_HOME
+        value: /root
+
+container_commands:
+    00_install_composer_dependencies:
+      command: "sudo php -d memory_limit=-1 /usr/bin/composer.phar install --no-dev --no-interaction --prefer-dist --optimize-autoloader"
+      cwd: "/var/app/staging"
