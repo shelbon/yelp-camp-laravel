@@ -8,9 +8,9 @@ https://fonts.google.com/specimen/Archivo
 
 AWS SERVICE USED :
 
-- AWS INCOGNITO
-- AWS SES
-- AWS S3
+- AWS INCOGNITO ✔️
+- AWS SES ✔️
+- AWS S3  ✔️
 - AWS DYNAMODB  ✔️
 - AWS lambda
 - AWS API GATEAWAY
@@ -21,7 +21,7 @@ AWS SERVICE USED :
 
 ### Prerequisites
 
-- php,composer
+- php,composer,python
 
 - docker or docker desktop
 
@@ -61,6 +61,26 @@ delete container
 docker compsoe down
 ```
 
-## Deployement
+## Deployement via  elastic beanstalk command line interface
 
-TODO
+## Prerequisites
+   - A AWS account
+
+## setup environment
+create environment,if no application was created before 
+it will ask you to select the aws region and  some imformation
+to create the environment
+```shell
+ eb create environment-name
+```
+
+send environment from .env file to elastic beanstalk env after 
+that rebuild the environment on environment page on aws website
+```shell 
+  eb setenv `cat .env | sed '/^#/ d' | sed '/^$/ d'`
+```
+
+when some change are done, commit the file then
+```shell
+ eb deploy
+```

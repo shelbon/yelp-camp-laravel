@@ -58,7 +58,7 @@
             </a>
             <div>
                 <p>Partnered with:</p>
-                <ul class="flex ">
+                <ul class="flex p-4 space-x-4 ">
                     @foreach($banners as $banner)
                         <li class="item">
                             <img src="{{$banner->src}}" alt="logo of {{$banner->name}}" />

@@ -60,7 +60,7 @@ class CampgroundController extends Controller
 
         $campground = Campground::find($campgroundId)?->withReviewsAndRelationships()
             ?->withAuthor();
-        if(isset($campground->reviews)) {
+        if (isset($campground->reviews)) {
             $campground->reviews = $campground?->reviews?->sortBy('created_at');
         }
 

@@ -2,13 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Barryvdh\Debugbar\Facades\Debugbar;
+use ErrorException;
+use Illuminate\Support\Facades\Storage;
 
 class HomeController extends Controller
 {
-     public function  home(){
-         $path = storage_path() . "/app/json/banner.json";
-         $json = json_decode(file_get_contents($path));
-         return view('home',['banners'=>$json]);
-     }
+
+    public function home()
+    {
+        set_error_handler(
+            function ($severity, $message, $file, $line) {
+                throw new ErrorException($message, $severity, $severity, $file, $line);
+            }
+        );
+
+         $banners=[];
+        try {
+            $json =  Storage::disk("public")->get('data/banners.json');
+            $banners=array_merge($banners, json_decode($json, false, 512, JSON_THROW_ON_ERROR));
+        } catch (\ErrorException|\JsonException  $e) {
+            Debugbar::error($e->getMessage());
+        }
+        return view('home', ['banners' => $banners]);
+    }
 }
