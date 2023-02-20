@@ -20,10 +20,3 @@ global:
   profile: eb-cli
   sc: git
   workspace_type: Application
-option_settings:
-  aws:elasticbeanstalk:application:environment:
-    option_name: COMPOSER_HOME
-    value: /root
-  aws:elasticbeanstalk:container:php:phpini:
-    composer_options: --no-dev
-    document_root: /public
