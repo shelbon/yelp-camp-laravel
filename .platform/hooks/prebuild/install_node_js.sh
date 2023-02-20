@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 if [[ ! "$(node --version)" =~ "v16" ]]; then
 sudo yum install -y gcc-c++ make
 sudo yum remove -y nodejs npm
