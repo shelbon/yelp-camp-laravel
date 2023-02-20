@@ -1,6 +1,13 @@
 branch-defaults:
+  deploy-to-aws:
+    environment: Yelpcamp-env
   splade-integration:
     environment: Yelpcamp-env
+container_commands:
+  00_install_composer_dependencies:
+    command: sudo php -d memory_limit=-1 /usr/bin/composer.phar install --no-dev --no-interaction
+      --prefer-dist --optimize-autoloader
+    cwd: /var/app/staging
 environment-defaults:
   Yelpcamp-env:
     branch: null
@@ -18,15 +25,9 @@ global:
   sc: git
   workspace_type: Application
 option_settings:
-  aws:elasticbeanstalk:container:php:phpini:
-    document_root: /public
-    composer_options: --no-dev
-
   aws:elasticbeanstalk:application:environment:
-        option_name: COMPOSER_HOME
-        value: /root
-
-container_commands:
-    00_install_composer_dependencies:
-      command: "sudo php -d memory_limit=-1 /usr/bin/composer.phar install --no-dev --no-interaction --prefer-dist --optimize-autoloader"
-      cwd: "/var/app/staging"
+    option_name: COMPOSER_HOME
+    value: /root
+  aws:elasticbeanstalk:container:php:phpini:
+    composer_options: --no-dev
+    document_root: /public
