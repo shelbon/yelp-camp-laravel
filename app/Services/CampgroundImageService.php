@@ -33,7 +33,7 @@ class CampgroundImageService
                 'Bucket' => $image?->getBucket(),
                 'Key' => $image?->getKey()));
         } catch (Aws\S3\Exception\S3Exception $e) {
-            \Debugbar::addMessage("There was an error deleting the file.\n");
+
             throw ValidationException::withMessages([
                 "image" => $e->getMessage()
             ]);

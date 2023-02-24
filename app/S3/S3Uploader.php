@@ -30,8 +30,6 @@ class S3Uploader
                 'SourceFile' => $file->path(),
                 'ACL' => 'public-read'));
         } catch (Aws\S3\Exception\S3Exception $e) {
-            \Debugbar::addMessage("There was an error uploading the file.\n");
-
         }
         return $result;
     }

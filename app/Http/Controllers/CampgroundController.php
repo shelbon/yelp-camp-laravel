@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Rules\UserExist;
 use App\Services\CampgroundService;
 use App\Services\UserService;
-use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -39,7 +38,7 @@ class CampgroundController extends Controller
                 return $campground->withAuthor();
             });
         } catch (\Exception $e) {
-            Debugbar::addMessage($e->getMessage());
+
             abort(500, "Unknown error happened when loading campgrounds");
         }
 
@@ -51,7 +50,7 @@ class CampgroundController extends Controller
         $request->validate([
             'search' => 'alpha_num|max:200'
         ]);
-        Debugbar::info($request->search);
+
         return view('campgrounds.home', ['campgrounds' => $this->campgroundService->search($request->search)]);
     }
 
